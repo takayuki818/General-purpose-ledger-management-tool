@@ -26,11 +26,11 @@ Sub 書式再設定()
                 最下行 = .Cells(Rows.Count, 列).End(xlUp).Row
             End If
         Next
-        Call 台帳書式設定(最下行, 最右列)
+        Call 台帳書式設定(最下行 + 100, 最右列)
         Application.EnableEvents = False
         .Activate
         Application.EnableEvents = True
-        MsgBox "「台帳」シートの書式を再設定しました"
+        MsgBox "「台帳」シートの書式を再設定しました" & vbCrLf & "※最下行+100行まで書式設定行延長"
     End With
 End Sub
 Sub 台帳書式設定(最下行 As Long, 最右列 As Long)

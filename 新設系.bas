@@ -3,7 +3,7 @@ Option Explicit
 Sub ツール新規作成()
     Dim 終行 As Long, 行 As Long, 最右列 As Long, 列 As Long
     Dim 定義名 As String
-    If MsgBox("項目設定を元に新たにベースツールを作成します" & vbCrLf & vbCrLf & "よろしいですか？", vbYesNo) <> vbYes Then Exit Sub
+    If MsgBox("項目設定を元に新しいツールベースを作成します" & vbCrLf & vbCrLf & "よろしいですか？", vbYesNo) <> vbYes Then Exit Sub
     Call 全シート展開
     Call 定義名全削除
     With Sheets("台帳転記設定")
@@ -91,5 +91,5 @@ Sub 台帳列関数設定(セル As Range, 列 As Long)
     セル.FormulaR1C1 = "=COLUMN(管理台帳!C" & 列 & ")"
 End Sub
 Sub 印刷様式参照関数設定(セル As Range, 列番号 As Long)
-    セル.Formula = "=INDIRECT(ADDRESS(_選択行," & 列番号 & ",,,""管理台帳""))"
+    セル.FormulaR1C1 = "=INDIRECT(ADDRESS(_選択行,COLUMN(管理台帳!C" & 列番号 & "),,,""管理台帳""))"
 End Sub

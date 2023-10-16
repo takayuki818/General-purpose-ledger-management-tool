@@ -62,8 +62,9 @@ Sub 登録更新()
         End If
     End With
 End Sub
-Sub 台帳戻し()
-    Dim 終行 As Long, 行 As Long, 最右列 As Long, 列 As Long, 記録行 As Long
+Sub 台帳戻し(記録行 As Long)
+    Dim 終行 As Long, 行 As Long, 最右列 As Long, 列 As Long
+    Application.ScreenUpdating = False
     With Sheets("台帳転記設定")
         終行 = .Cells(Rows.Count, 1).End(xlUp).Row
         ReDim 設定(1 To 終行 - 1, 1 To 2)
@@ -75,7 +76,6 @@ Sub 台帳戻し()
     End With
     With Sheets("管理台帳")
         ReDim 配列(1 To 1, 1 To 最右列)
-        記録行 = .Range("_選択行")
         For 列 = 1 To 最右列
             配列(1, 列) = .Cells(記録行, 列)
         Next
@@ -86,8 +86,8 @@ Sub 台帳戻し()
         For 行 = 1 To UBound(設定, 1)
             .Range(設定(行, 1)) = 配列(1, 設定(行, 2))
         Next
-        .Range("_転記先行") = 記録行
         .Protect
         .Activate
     End With
+    Application.ScreenUpdating = True
 End Sub

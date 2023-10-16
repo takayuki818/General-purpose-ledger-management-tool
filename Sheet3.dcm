@@ -9,7 +9,9 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Option Explicit
 Private Sub Worksheet_Activate()
-    MsgBox "任意のセルをダブルクリック" & vbCrLf & "→　入力フォームに展開 (更新モード)"
+    If ActiveSheet.Name = "管理台帳" Then
+        MsgBox "任意のセルをダブルクリック" & vbCrLf & "→　入力フォームに展開 (更新モード)"
+    End If
 End Sub
 Private Sub Worksheet_SelectionChange(ByVal Target As Range)
     With Sheets("管理台帳")
@@ -17,6 +19,9 @@ Private Sub Worksheet_SelectionChange(ByVal Target As Range)
     End With
 End Sub
 Private Sub Worksheet_BeforeDoubleClick(ByVal Target As Range, Cancel As Boolean)
-    Call 台帳戻し
+    With Sheets("管理台帳")
+        Call 台帳戻し(.Range("_選択行"))
+        Sheets("入力フォーム").Range("_転記先行") = .Range("_選択行")
+    End With
 End Sub
 

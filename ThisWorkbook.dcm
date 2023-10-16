@@ -12,7 +12,7 @@ Private Sub Workbook_SheetDeactivate(ByVal Sh As Object)
     If Sh.Name = "入力フォーム" Then
         With Sheets("入力フォーム")
             If .Range("_転記先行") <> "新規" Then
-                Select Case MsgBox("台帳は未更新の状態です" & vbCrLf & vbCrLf & "入力フォームをクリアしてよろしいですか？", vbYesNo)
+                Select Case MsgBox("台帳更新が実行されていません" & vbCrLf & vbCrLf & "入力フォームをクリアしてよろしいですか？", vbYesNo)
                     Case vbYes: Call 新規登録モード
                     Case vbNo: Sh.Activate
                 End Select

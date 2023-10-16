@@ -1,0 +1,27 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "Sheet2"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Option Explicit
+Private Sub SpinButton1_Change()
+    Call 台帳戻し(Sheets("入力フォーム").Range("_転記先行"))
+End Sub
+Private Sub Worksheet_Change(ByVal Target As Range)
+    With Sheets("入力フォーム")
+        If Target.Address = .Range("_転記先行").Address Then
+            Select Case Target
+                Case "新規"
+                Case Is > 1
+                    Call 台帳戻し(.Range("_転記先行"))
+                Case Else
+                    MsgBox "入力値が不正です" & vbCrLf & vbCrLf & "入力可能な値は「新規」または「2以上の整数」です"
+                    Call 新規登録モード
+            End Select
+        End If
+    End With
+End Sub
