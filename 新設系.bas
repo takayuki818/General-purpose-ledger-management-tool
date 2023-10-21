@@ -9,18 +9,15 @@ Sub ツール新規作成()
     With Sheets("台帳転記設定")
         終行 = .Cells(Rows.Count, 1).End(xlUp).Row
         ReDim 項目リスト(1 To 終行 - 1, 1 To 1)
-        Sheets("入力フォーム").Unprotect
         For 行 = 2 To 終行
             項目リスト(行 - 1, 1) = .Cells(行, 1)
             定義名 = 項目リスト(行 - 1, 1)
-            Call 台帳列関数設定(.Cells(行, 2), 行 - 1)
             Call 名前の定義追加(定義名, "=入力フォーム!R" & 行 + 3 & "C2")
+            Call 台帳列関数設定(.Cells(行, 2), 行 - 1)
         Next
-        Sheets("入力フォーム").Protect
         .Buttons.Delete
     End With
     With Sheets("入力フォーム")
-        .Unprotect
         .Range("A5").Resize(Rows.Count - 4, 2).ClearContents
         .Range("A5").Resize(Rows.Count - 4, 2).Borders.LineStyle = False
         .Range("A5").Resize(Rows.Count - 4, 2).Interior.ColorIndex = 0
@@ -28,7 +25,6 @@ Sub ツール新規作成()
         .Range("B5").Resize(UBound(項目リスト, 1), 1).Locked = False
         .Range("B5").Resize(UBound(項目リスト, 1), 1).Interior.ColorIndex = 6
         .Range("A5").Resize(UBound(項目リスト, 1), 2).Borders.LineStyle = True
-        .Protect
         .Activate
     End With
     With Sheets("管理台帳")

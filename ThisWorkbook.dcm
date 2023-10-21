@@ -8,6 +8,16 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Option Explicit
+Private Sub Workbook_WindowActivate(ByVal Wn As Window)
+    If ActiveSheet.Name = "入力フォーム" Then
+        If Sheets("入力フォーム").Range("_レイアウト編集モード") = "ON" Then Exit Sub
+        Select Case Application.CutCopyMode
+            Case xlCopy, xlCut
+                MsgBox "入力フォームへの貼付操作は禁止されています"
+                Application.CutCopyMode = False
+        End Select
+    End If
+End Sub
 Private Sub Workbook_SheetDeactivate(ByVal Sh As Object)
     If Sh.Name = "入力フォーム" Then
         With Sheets("入力フォーム")

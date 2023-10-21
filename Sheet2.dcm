@@ -8,20 +8,58 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Option Explicit
+Private Sub Worksheet_SelectionChange(ByVal Target As Range)
+    If Sheets("入力フォーム").Range("_レイアウト編集モード") = "ON" Then Exit Sub
+    Select Case Application.CutCopyMode
+        Case xlCopy
+        Case xlCut
+            MsgBox "入力シート上での切り取り操作は禁止されています"
+            Application.CutCopyMode = False
+    End Select
+End Sub
+Private Sub Worksheet_Deactivate()
+    If Sheets("入力フォーム").Range("_レイアウト編集モード") = "ON" Then Exit Sub
+    Select Case Application.CutCopyMode
+        Case xlCopy
+        Case xlCut
+            MsgBox "入力シートからの切り取り操作は禁止されています"
+            Application.CutCopyMode = False
+    End Select
+End Sub
+Private Sub Worksheet_Activate()
+    If Sheets("入力フォーム").Range("_レイアウト編集モード") = "ON" Then Exit Sub
+    Select Case Application.CutCopyMode
+        Case xlCopy, xlCut
+            MsgBox "入力フォームへの貼付操作は禁止されています"
+            Application.CutCopyMode = False
+    End Select
+End Sub
 Private Sub SpinButton1_Change()
     Call 台帳戻し(Sheets("入力フォーム").Range("_転記先行"))
 End Sub
 Private Sub Worksheet_Change(ByVal Target As Range)
+    Dim 文 As String
     With Sheets("入力フォーム")
-        If Target.Address = .Range("_転記先行").Address Then
-            Select Case Target
-                Case "新規"
-                Case Is > 1
-                    Call 台帳戻し(.Range("_転記先行"))
-                Case Else
-                    MsgBox "入力値が不正です" & vbCrLf & vbCrLf & "入力可能な値は「新規」または「2以上の整数」です"
-                    Call 新規登録モード
-            End Select
-        End If
+        Select Case Target.Address
+            Case .Range("_転記先行").Address
+                Select Case Target
+                    Case "新規"
+                    Case Is > 1
+                        Call 台帳戻し(.Range("_転記先行"))
+                    Case Else
+                        MsgBox "入力値が不正です" & vbCrLf & vbCrLf & "入力可能な値は「新規」または「2以上の整数」です"
+                        Call 新規登録モード
+                End Select
+            Case .Range("_レイアウト編集モード").Address
+                Select Case Target
+                    Case "ON"
+                        文 = "レイアウト編集モードをONに切り替えました" & vbCrLf & vbCrLf & "シート保護解除＆セルの切り取り操作が許容されます" & vbCrLf & "作業完了後は必ずモードをOFFに切り替えてください"
+                        .Unprotect
+                    Case "OFF"
+                        文 = "レイアウト編集モードをOFFに切り替えました" & vbCrLf & vbCrLf & "シート保護開始＆セルの切り取り操作が禁止されます"
+                        .Protect
+                End Select
+                MsgBox 文
+        End Select
     End With
 End Sub
