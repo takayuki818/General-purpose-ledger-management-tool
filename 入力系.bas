@@ -12,14 +12,14 @@ Sub 入力フォームクリア()
     Dim 終行 As Long, 行 As Long
     With Sheets("台帳転記設定")
         終行 = .Cells(Rows.Count, 1).End(xlUp).Row
-        ReDim 項目リスト(2 To 終行, 1 To 1)
+        ReDim 項目リスト(2 To 終行)
         For 行 = 2 To 終行
-            項目リスト(行, 1) = .Cells(行, 1)
+            項目リスト(行) = .Cells(行, 1)
         Next
     End With
     With Sheets("入力フォーム")
         For 行 = 2 To 終行
-            .Range(項目リスト(行, 1)).MergeArea.ClearContents
+            .Range(項目リスト(行)).MergeArea.ClearContents
         Next
     End With
 End Sub
